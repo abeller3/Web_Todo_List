@@ -1,7 +1,32 @@
+<?php
+var_dump($_GET);
+
+
+function loadFile($filename = './list.txt') {
+
+    $handle = fopen($filename, 'r');
+    $contents = trim(fread($handle, filesize($filename)));
+    $contents_array = explode("\n", $contents);
+    fclose($handle);
+
+    return $contents_array;
+}
+
+function saveFile($list, $filename = './list.txt') {
+
+    $handle = fopen($filename, 'w');
+    $string = implode("\n", $list);
+    $contents = fwrite($handle, $string);
+    fclose($handle);
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>TODO List</title>
+    <title>TODO List</title>
 </head>
 <body>
 <h1>TODO List</h1>
@@ -9,55 +34,38 @@
     <form method="POST">
     <!-- Add item to the list here -->
     <p>
-     <label for="Subject">Add item: </label>
-     <input id="Subject" name="Subject" type="text">
+     <label for="item_to_add">Add item: </label>
+     <input id="item_to_add" name="item_to_add" type="text">
     </p>
         <input type="submit">
     </form>
 
+    <ul>
+
     <?php
 
-    function loadFile($fileName = './list.txt') {
-        if(is_readable($fileName)) {
-        $filesize = filesize($fileName);
-        $handle = fopen($fileName, "r");
-        $contents = trim(fread($handle, $filesize));
-        $contents_array = explode("\n", $contents);
-
-        fclose($handle);
-        return $contents_array;
-         }
-
-    }
-
-    function saveFile($list, $fileName){
-          //
-    }
-
-        // var_dump($_POST);
-
-        // Loads file and assigns to variable list as an array.
+        // Load file data into list array
         $list = loadFile();
 
+        // var_dump($_POST);
+        
 
-
-        // Append new item ($_POST) to existing array of list items.
-        $item_add = implode("", $_POST);
-        array_push($list, $item_add);
-
-        echo "<ul>";
-            foreach($list as $value) {
-                echo "<li>{$value}</li>";
-            }
-        echo "</ul>";
-
-        // var_dump($list);
-
-        // Save new list to file
-
-
-
+        if (!empty($_POST)) {
+            //equally list to array push
+            $list[] = "{$_POST['item_to_add']}";
+        }
+        if (isset($_GET['removeIndex'])) {
+            $remove = $_GET['removeIndex'];
+            unset($list[$remove]);
+            $list = array_values($list);
+        }
+        
+        // Output List
+        foreach ($list as $index => $value) {
+            echo "<li>{$value} <a href=\"new.php?removeIndex={$index}\">Remove Item</a></li>";
+        }
+        saveFile($list);
     ?>
-
+    </ul>
 </body>
 </html>
