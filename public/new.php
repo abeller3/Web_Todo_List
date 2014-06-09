@@ -1,5 +1,5 @@
 
-<? var_dump($_GET); 
+<? 
  $list = []; 
  $filename = "list.txt"; 
  $error = ''; 
@@ -34,11 +34,14 @@ $list = loadFile($filename);
 <html>
 <head>
 	<title>TODO List</title>
+    <link rel="stylesheet" href="todo_style.css">
 </head>
 <body>
+    <div class="center">
+
     <?php
 
-        var_dump($_FILES);
+       
 
         // Verify there were uploaded files and no errors
         if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) :
@@ -83,7 +86,7 @@ $list = loadFile($filename);
         <input type="submit">
 </form>
 
-<ul>
+<ul class="flower">
     	<? if (!empty($_POST)) : ?>
     		<? $list[] = $_POST['item_to_add']; ?>
        <? endif; ?>
@@ -104,5 +107,6 @@ $list = loadFile($filename);
        <? saveFile($list, $filename); ?>
     
 	</ul>
+        </div>
 </body>
 </html>
