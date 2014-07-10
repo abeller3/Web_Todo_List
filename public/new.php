@@ -4,8 +4,6 @@
  $filename = "list.txt"; 
  $error = ''; 
 
-
-
 function loadFile($filename)
 {
     if(filesize($filename) > 0) 
